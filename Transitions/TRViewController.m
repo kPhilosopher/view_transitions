@@ -8,9 +8,8 @@
 
 #import "TRViewController.h"
 
-#define NUMBER_OF_TRANSITIONS 3
 #define TOTAL_ANIMATION_DURATION 1.2
-#define ANIMATION_START_X_COORDINATE 50
+#define DELTA_X_OFF_OF_SCREEN 50
 
 @interface TRViewController ()
 
@@ -38,7 +37,7 @@
     [self.view addSubview:firstLabel];
     
     CGRect subsequentLabelRectangle = firstLabel.frame;
-    subsequentLabelRectangle.origin.x = CGRectGetMaxX(self.view.frame) + ANIMATION_START_X_COORDINATE;
+    subsequentLabelRectangle.origin.x = CGRectGetMaxX(self.view.frame) + DELTA_X_OFF_OF_SCREEN;
     
     UILabel *secondLabel = [[UILabel alloc] initWithFrame:subsequentLabelRectangle];
     secondLabel.text = @"Hi";
@@ -76,22 +75,22 @@
     colourIndex++;
     labelIndex++;
     [UIView animateWithDuration:TOTAL_ANIMATION_DURATION animations:^{
-        self.view.backgroundColor = [_colours objectAtIndex:colourIndex % NUMBER_OF_TRANSITIONS];
+        self.view.backgroundColor = [_colours objectAtIndex:colourIndex % [_colours count]];
     }];
     [UIView animateWithDuration:(TOTAL_ANIMATION_DURATION/2) animations:^{
-        UILabel *displayedLabel = (UILabel*)[_labels objectAtIndex:labelIndex % NUMBER_OF_TRANSITIONS];
+        UILabel *displayedLabel = (UILabel*)[_labels objectAtIndex:labelIndex % [_labels count]];
         CGRect oldRectangle = displayedLabel.frame;
-        oldRectangle.origin.x = -ANIMATION_START_X_COORDINATE;
+        oldRectangle.origin.x = -DELTA_X_OFF_OF_SCREEN;
         displayedLabel.frame = oldRectangle;
 
     } completion:^(BOOL finished){
         [UIView animateWithDuration:(TOTAL_ANIMATION_DURATION/2) animations:^{
-            UILabel *nextLabel = (UILabel*)[_labels objectAtIndex:(labelIndex + 1) % NUMBER_OF_TRANSITIONS];
+            UILabel *nextLabel = (UILabel*)[_labels objectAtIndex:(labelIndex + 1) % [_labels count]];
             nextLabel.center = self.view.center;
         } completion:^(BOOL finished){
-            UILabel *justDisappearedLabel = (UILabel*)[_labels objectAtIndex:labelIndex % NUMBER_OF_TRANSITIONS];
+            UILabel *justDisappearedLabel = (UILabel*)[_labels objectAtIndex:labelIndex % [_labels count]];
             CGRect oldRectangle = justDisappearedLabel.frame;
-            oldRectangle.origin.x = CGRectGetMaxX(self.view.frame) + ANIMATION_START_X_COORDINATE;
+            oldRectangle.origin.x = CGRectGetMaxX(self.view.frame) + DELTA_X_OFF_OF_SCREEN;
             justDisappearedLabel.frame = oldRectangle;
         }];
     }];
