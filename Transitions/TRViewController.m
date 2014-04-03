@@ -30,6 +30,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     CGRect firstLabelRectangle = CGRectMake(0, 0, 40, 40);
     UILabel *firstLabel = [[UILabel alloc] initWithFrame:firstLabelRectangle];
     firstLabel.center = self.view.center;
@@ -47,8 +48,8 @@
     thirdLabel.text = @"Hey";
     [self.view addSubview:thirdLabel];
 
-    
     _labels = [NSArray arrayWithObjects:firstLabel, secondLabel, thirdLabel, nil];
+    
     
     UIColor *firstColor = [UIColor greenColor];
     UIColor *secondColor = [UIColor blueColor];
@@ -65,12 +66,12 @@
     labelIndex = -1;
     [NSTimer scheduledTimerWithTimeInterval:3.5
                                      target:self
-                                   selector:@selector(startTransitioning)
+                                   selector:@selector(transitionAnimation)
                                    userInfo:nil
                                     repeats:YES];
 }
 
-- (void)startTransitioning;
+- (void)transitionAnimation;
 {
     colourIndex++;
     labelIndex++;
@@ -78,10 +79,10 @@
         self.view.backgroundColor = [_colours objectAtIndex:colourIndex % NUMBER_OF_TRANSITIONS];
     }];
     [UIView animateWithDuration:(TOTAL_ANIMATION_DURATION/2) animations:^{
-        UILabel *currentlyDisplayingLabel = (UILabel*)[_labels objectAtIndex:labelIndex % NUMBER_OF_TRANSITIONS];
-        CGRect oldRectangle = currentlyDisplayingLabel.frame;
+        UILabel *displayedLabel = (UILabel*)[_labels objectAtIndex:labelIndex % NUMBER_OF_TRANSITIONS];
+        CGRect oldRectangle = displayedLabel.frame;
         oldRectangle.origin.x = -ANIMATION_START_X_COORDINATE;
-        currentlyDisplayingLabel.frame = oldRectangle;
+        displayedLabel.frame = oldRectangle;
 
     } completion:^(BOOL finished){
         [UIView animateWithDuration:(TOTAL_ANIMATION_DURATION/2) animations:^{
