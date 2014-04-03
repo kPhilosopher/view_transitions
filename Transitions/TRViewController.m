@@ -10,6 +10,7 @@
 
 #define TOTAL_ANIMATION_DURATION 1.2
 #define DELTA_X_OFF_OF_SCREEN 50
+#define ARBRITARY_LARGE_NUMBER 1073741824
 
 @interface TRViewController ()
 
@@ -74,11 +75,18 @@
 {
     colourIndex++;
     labelIndex++;
+    if (colourIndex == [_colours count]) {
+        colourIndex = 0;
+    }
+    if (labelIndex == [_labels count]) {
+        labelIndex = 0;
+    }
+    
     [UIView animateWithDuration:TOTAL_ANIMATION_DURATION animations:^{
-        self.view.backgroundColor = [_colours objectAtIndex:colourIndex % [_colours count]];
+        self.view.backgroundColor = [_colours objectAtIndex:colourIndex];
     }];
     [UIView animateWithDuration:(TOTAL_ANIMATION_DURATION/2) animations:^{
-        UILabel *displayedLabel = (UILabel*)[_labels objectAtIndex:labelIndex % [_labels count]];
+        UILabel *displayedLabel = (UILabel*)[_labels objectAtIndex:labelIndex];
         CGRect oldRectangle = displayedLabel.frame;
         oldRectangle.origin.x = -DELTA_X_OFF_OF_SCREEN;
         displayedLabel.frame = oldRectangle;
@@ -88,7 +96,7 @@
             UILabel *nextLabel = (UILabel*)[_labels objectAtIndex:(labelIndex + 1) % [_labels count]];
             nextLabel.center = self.view.center;
         } completion:^(BOOL finished){
-            UILabel *justDisappearedLabel = (UILabel*)[_labels objectAtIndex:labelIndex % [_labels count]];
+            UILabel *justDisappearedLabel = (UILabel*)[_labels objectAtIndex:labelIndex];
             CGRect oldRectangle = justDisappearedLabel.frame;
             oldRectangle.origin.x = CGRectGetMaxX(self.view.frame) + DELTA_X_OFF_OF_SCREEN;
             justDisappearedLabel.frame = oldRectangle;
